@@ -13,7 +13,11 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/your-username/your-repo.git'
+                sh '''
+                    git clone https://github.com/LelutoDeku/student_housing_chain.git
+                    cd student_housing_chain
+                    git checkout main
+                    '''
             }
         }
 
