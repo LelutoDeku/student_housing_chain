@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+        AWS_ACCESS_KEY_ID = credentials('applied-devops-project')
+        AWS_SECRET_ACCESS_KEY = credentials('applied-devops-project')
         AWS_DEFAULT_REGION = 'us-east-1' // Update the region as per your AWS configuration
         ECR_REPO_NAME = 'applied-devops' // Update with your ECR repository name
         EKS_CLUSTER_NAME = 'applied-devops' // Update with your EKS cluster name
