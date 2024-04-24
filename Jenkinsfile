@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     // Build Docker image
-                    docker build -t $DOCKER_IMAGE_NAME .
+                    sh "docker build -t $DOCKER_IMAGE_NAME ."
                 }
             }
         }
@@ -42,10 +42,10 @@ pipeline {
                     echo $ecrLogin | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
 
                     // Tag the Docker image
-                    docker tag $DOCKER_IMAGE_NAME:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:latest
+                    sh "docker tag $DOCKER_IMAGE_NAME:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:latest"
 
                     // Push Docker image to ECR
-                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:latest
+                    sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:latest"
                 }
             }
         }
