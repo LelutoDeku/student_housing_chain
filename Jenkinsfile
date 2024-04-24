@@ -27,7 +27,7 @@ pipeline {
                 sh ''' 
                     curl -fsSL https://get.docker.com -o get-docker.sh
                     sh get-docker.sh
-                    sudo usermod -aG docker jenkins
+                    chown -R 1000:1000 /var/run/docker.sock                    
                     sudo systemctl start docker
                     docker build -t $DOCKER_IMAGE_NAME .
                 '''
