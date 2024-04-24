@@ -8,7 +8,8 @@ pipeline {
         ECR_REPO_NAME = 'applied-devops' // Update with your ECR repository name
         EKS_CLUSTER_NAME = 'applied-devops' // Update with your EKS cluster name
         DOCKER_IMAGE_NAME_FOR_CLIENT = 'harshpandey3001/client:latest'
-        DOCKER_IMAGE_NAME_FOR_SERVER = 'harshpandey3001/server' 
+        DOCKER_IMAGE_NAME_FOR_SERVER = 'harshpandey3001/server'
+        ECR_URL = '975050378366.dkr.ecr.us-east-1.amazonaws.com'
 
     }
 
@@ -46,17 +47,14 @@ pipeline {
                        apt-get update
                        apt-get install -y awscli
                     '''
-
-                    AWS_ACCOUNT_ID = sh(script: "aws sts get-caller-identity --query Account --output text", returnStdout: true).trim()
-                    ecrLogin = sh(script: "aws ecr get-login-password --region ${AWS_DEFAULT_REGION}", returnStdout: true).trim()
                     
                     sh '''
                     echo $AWS_ACCOUNT_ID
                         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 975050378366.dkr.ecr.us-east-1.amazonaws.com
-                        docker tag $DOCKER_IMAGE_NAME_FOR_CLIENT ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:client_3000
-                        docker tag $DOCKER_IMAGE_NAME_FOR_SERVER ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:server_3010
-                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:client_3000
-                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:server_3010
+                        docker tag $DOCKER_IMAGE_NAME_FOR_CLIENT $ECR_URL/${ECR_REPO_NAME}:client_3000
+                        docker tag $DOCKER_IMAGE_NAME_FOR_SERVER $ECR_URL/${ECR_REPO_NAME}:server_3010
+                        docker push $ECR_URL/${ECR_REPO_NAME}:client_3000
+                        docker push $ECR_URL/${ECR_REPO_NAME}:server_3010
 
                     '''
                 
