@@ -44,8 +44,12 @@ pipeline {
                 script {
                         //  Install AWS CLI
                     sh '''
-                       apt-get update
-                       apt-get install -y awscli
+                       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                        unzip awscliv2.zip
+                        sudo ./aws/install
+                        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                        unzip awscliv2.zip
+                        sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
                     '''
                     
                     sh '''
@@ -71,25 +75,6 @@ pipeline {
                         chmod +x ./kubectl
                         mv ./kubectl /usr/local/bin/kubectl
 
-                        // Retrieve the current ConfigMap
-                        kubectl get configmap aws-auth -n kube-system -o yaml > aws-auth-configmap.yaml
-                        
-                        // Add the new configuration to the ConfigMap
-                        cat <<EOT >> aws-auth-configmap.yaml
-                        mapUsers: |
-                          - userarn: arn:aws:iam::814200988517:user/eks-dev-user
-                            username: eks-dev-user
-                            groups:
-                              - system:masters
-                          - rolearn: arn:aws:iam::814200988517:role/test-role
-                            username: test-role
-                            groups:
-                              - system:masters
-                        EOT
-                        
-                        // Apply the updated ConfigMap
-                        kubectl apply -f aws-auth-configmap.yaml
-                        aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION} --name ${EKS_CLUSTER_NAME}
                         kubectl apply -f deployment.yaml
                     '''
                 }
