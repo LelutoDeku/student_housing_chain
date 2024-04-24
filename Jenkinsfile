@@ -66,12 +66,30 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        # Install kubectl
-                        curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+                         // Install kubectl
+                        curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.29.3/2024-04-19/bin/linux/amd64/kubectl
                         chmod +x ./kubectl
                         mv ./kubectl /usr/local/bin/kubectl
-        
-                        aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}
+
+                        // Retrieve the current ConfigMap
+                        kubectl get configmap aws-auth -n kube-system -o yaml > aws-auth-configmap.yaml
+                        
+                        // Add the new configuration to the ConfigMap
+                        cat <<EOT >> aws-auth-configmap.yaml
+                        mapUsers: |
+                          - userarn: arn:aws:iam::814200988517:user/eks-dev-user
+                            username: eks-dev-user
+                            groups:
+                              - system:masters
+                          - rolearn: arn:aws:iam::814200988517:role/test-role
+                            username: test-role
+                            groups:
+                              - system:masters
+                        EOT
+                        
+                        // Apply the updated ConfigMap
+                        kubectl apply -f aws-auth-configmap.yaml
+                        aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION} --name ${EKS_CLUSTER_NAME}
                         kubectl apply -f deployment.yaml
                     '''
                 }
