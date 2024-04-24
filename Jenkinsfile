@@ -31,8 +31,8 @@ pipeline {
                     sh get-docker.sh
                     chown -R 1000:1000 /var/run/docker.sock                    
                     nohup dockerd >/dev/null 2>&1 &
-                    docker pull harshpandey3001/client:latest
-                    docker pull harshpandey3001/server
+                    docker pull DOCKER_IMAGE_NAME_FOR_CLIENT
+                    docker pull DOCKER_IMAGE_NAME_FOR_SERVER
                     
                 '''
             }
@@ -70,9 +70,8 @@ pipeline {
                         curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
                         chmod +x ./kubectl
                         mv ./kubectl /usr/local/bin/kubectl
-
-                        
-                        aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}"
+        
+                        aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}
                         kubectl apply -f kubernetes/deployment.yaml
                     '''
                 }
