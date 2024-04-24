@@ -15,11 +15,11 @@ spec:
         app: my-app
     spec:
       containers:
-      - name: web-app-3000
-        image: your-ecr-repo-name:web_app_3000
+      - name: client_3000
+        image: applied-devops:client_3000
         ports:
         - containerPort: 3000
-      - name: web-app-3010
-        image: your-ecr-repo-name:web_app_3010
+      - name: server_3000
+        image: applied-devops:server_3000
         ports:
         - containerPort: 3010
