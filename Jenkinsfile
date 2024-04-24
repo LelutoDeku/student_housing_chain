@@ -14,6 +14,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 sh '''
+                    rm -rf student_housing_chain
                     git clone https://github.com/LelutoDeku/student_housing_chain.git
                     cd student_housing_chain
                     git checkout main
