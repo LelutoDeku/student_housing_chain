@@ -7,7 +7,9 @@ pipeline {
         AWS_DEFAULT_REGION = 'us-east-1' // Update the region as per your AWS configuration
         ECR_REPO_NAME = 'applied-devops' // Update with your ECR repository name
         EKS_CLUSTER_NAME = 'applied-devops' // Update with your EKS cluster name
-        DOCKER_IMAGE_NAME = 'applied_devops:v1.0' // Update with your Docker image name
+        DOCKER_IMAGE_NAME_FOR_CLIENT = 'harshpandey3001/client:latest'
+        DOCKER_IMAGE_NAME_FOR_SERVER = 'harshpandey3001/server' 
+
     }
 
     stages {
@@ -29,7 +31,9 @@ pipeline {
                     sh get-docker.sh
                     chown -R 1000:1000 /var/run/docker.sock                    
                     nohup dockerd >/dev/null 2>&1 &
-                    docker build -t $DOCKER_IMAGE_NAME .
+                    docker pull harshpandey3001/client:latest
+                    docker pull harshpandey3001/server
+                    
                 '''
             }
         }
