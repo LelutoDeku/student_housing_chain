@@ -31,8 +31,8 @@ pipeline {
                     sh get-docker.sh
                     chown -R 1000:1000 /var/run/docker.sock                    
                     nohup dockerd >/dev/null 2>&1 &
-                    docker pull DOCKER_IMAGE_NAME_FOR_CLIENT
-                    docker pull DOCKER_IMAGE_NAME_FOR_SERVER
+                    docker pull $DOCKER_IMAGE_NAME_FOR_CLIENT
+                    docker pull $DOCKER_IMAGE_NAME_FOR_SERVER
                     
                 '''
             }
@@ -44,7 +44,7 @@ pipeline {
                         //  Install AWS CLI
                        sh '''
                            apt-get update
-                            apt-get install -y awscli
+                           apt-get install -y awscli
                         '''
 
                     AWS_ACCOUNT_ID = sh(script: "aws sts get-caller-identity --query Account --output text", returnStdout: true).trim()
