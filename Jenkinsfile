@@ -60,8 +60,16 @@ pipeline {
         stage('Deploy to EKS') {
             steps {
                 script {
-                    sh "aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}"
-                    sh "kubectl apply -f kubernetes/deployment.yaml"
+                    sh '''
+                        # Install kubectl
+                        curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+                        chmod +x ./kubectl
+                        mv ./kubectl /usr/local/bin/kubectl
+
+                        
+                        aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}"
+                        kubectl apply -f kubernetes/deployment.yaml
+                    '''
                 }
             }
         }
