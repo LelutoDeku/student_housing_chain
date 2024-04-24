@@ -5,9 +5,9 @@ pipeline {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
         AWS_DEFAULT_REGION    = 'us-east-1' # Update the region as per your AWS configuration
-        ECR_REPO_NAME         = 'your-ecr-repo-name' # Update with your ECR repository name
-        EKS_CLUSTER_NAME      = 'your-eks-cluster-name' # Update with your EKS cluster name
-        DOCKER_IMAGE_NAME     = 'your-docker-image-name' # Update with your Docker image name
+        ECR_REPO_NAME         = 'applied-devops' # Update with your ECR repository name
+        EKS_CLUSTER_NAME      = 'applied-devops' # Update with your EKS cluster name
+        DOCKER_IMAGE_NAME     = 'applied_devops:v1.0' # Update with your Docker image name
     }
 
     stages {
