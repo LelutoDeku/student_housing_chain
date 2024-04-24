@@ -41,6 +41,12 @@ pipeline {
         stage('Push to ECR') {
             steps {
                 script {
+                        //  Install AWS CLI
+                       sh '''
+                           apt-get update
+                            apt-get install -y awscli
+                        '''
+
                     AWS_ACCOUNT_ID = sh(script: "aws sts get-caller-identity --query Account --output text", returnStdout: true).trim()
                     ecrLogin = sh(script: "aws ecr get-login-password --region ${AWS_DEFAULT_REGION}", returnStdout: true).trim()
                     sh "echo $ecrLogin | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
