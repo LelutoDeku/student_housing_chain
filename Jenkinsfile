@@ -70,8 +70,8 @@ pipeline {
             }
             steps {
                 script {
-                    // Download and extract Terraform binary
-                sh 'wget https://releases.hashicorp.com/terraform/0.15.4/terraform_0.15.4_linux_amd64.zip'
+                 // Download and extract Terraform binary
+                sh 'curl -O https://releases.hashicorp.com/terraform/0.15.4/terraform_0.15.4_linux_amd64.zip'
                 sh 'unzip terraform_0.15.4_linux_amd64.zip'
                 
                 // Move Terraform binary to a directory in PATH
