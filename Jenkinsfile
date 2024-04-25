@@ -75,10 +75,10 @@ pipeline {
                     
                     // Apply Terraform configuration to create resources
                     sh 'terraform apply -auto-approve'
-                    # Retrieve the public IP address from Terraform output and store it in a variable
+                     // Retrieve the public IP address from Terraform output and store it in a variable
                         EC2_PUBLIC_IP = $(terraform output -raw public_ip)
 
-                    # Output the value of the variable
+                     // Output the value of the variable
                     echo "The public IP address of the EC2 instance is: $public_ip"
 
                 }
@@ -89,17 +89,20 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    et the private key contents from Terraform output
+                      // Get the public IP address from Terraform output
+                    PUBLIC_IP=\$(terraform output -raw public_ip)
+
+                     // Get the private key contents from Terraform output
                     PRIVATE_KEY=\$(terraform output -raw private_key_pem)
 
-                    # Create a temporary file with the private key contents
+                     // Create a temporary file with the private key contents
                     echo "\$PRIVATE_KEY" > /tmp/ec2_private_key.pem
                     chmod 600 /tmp/ec2_private_key.pem
 
-                    # Copy your application to the EC2 instance
+                     // Copy your application to the EC2 instance
                     scp -i /tmp/ec2_private_key.pem -r /path/to/your/application ec2-user@\${PUBLIC_IP}:/path/on/ec2
 
-                    # Connect to the EC2 instance and run the Docker containers
+                     // Connect to the EC2 instance and run the Docker containers
                     ssh -i /tmp/ec2_private_key.pem ec2-user@\${PUBLIC_IP} "
                         cd /path/on/ec2/application
                         docker run -d -p 3000:3000 ${ECR_URL}/${ECR_REPO_NAME}:client_3000
