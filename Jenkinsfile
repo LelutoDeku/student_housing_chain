@@ -80,7 +80,7 @@ pipeline {
                            # mv ~/.kube/config ~/.kube/config.bk
                             aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION}  --name ${EKS_CLUSTER_NAME}
 
-                            cat ~/.kube/config
+                            kubectl config use-context arn:aws:eks:us-east-1:975050378366:cluster/applied-devops
                         kubectl apply -f deployment.yaml
                     '''
                 }
