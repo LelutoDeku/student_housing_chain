@@ -67,10 +67,14 @@ pipeline {
             steps {
                 script {
                     sh '''
-                         # Install kubectl
-                           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-                            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-                            mv ./kubectl /usr/local/bin/kubectl
+                         # Download the latest version of kubectl
+                            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                            
+                            # Make the downloaded kubectl binary executable
+                            chmod +x kubectl
+                            
+                            # Move kubectl binary to a directory in your PATH
+                            mv kubectl /usr/local/bin/kubectl
 
                         kubectl apply -f deployment.yaml
                     '''
