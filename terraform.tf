@@ -5,6 +5,7 @@ provider "aws" {
 resource "aws_instance" "applied-devops" {
   ami           = "ami-0b0ea68c435eb488d" # Specify the AMI ID of the instance
   instance_type = "t2.micro"              # Specify the instance type
+  key_name      = "ec2-key-pair"
 
   tags = {
     Name = "EC2 for applied devops project"              # Specify a name for your instance
