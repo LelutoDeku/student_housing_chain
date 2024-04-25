@@ -75,32 +75,21 @@ pipeline {
                     
                     // Apply Terraform configuration to create resources
                     sh 'terraform apply -auto-approve'
+                    # Retrieve the public IP address from Terraform output and store it in a variable
+                        EC2_PUBLIC_IP = $(terraform output -raw public_ip)
+
+                    # Output the value of the variable
+                    echo "The public IP address of the EC2 instance is: $public_ip"
+
                 }
             }
         }
 
-        stage('Deploy to EKS') {
+        stage('Deploy to EC2') {
             steps {
                 script {
                     sh '''
-                         # Download the latest version of kubectl
-                            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-                            
-                            # Make the downloaded kubectl binary executable
-                            chmod +x kubectl
-                            
-                            # Move kubectl binary to a directory in your PATH
-                            mv kubectl /usr/local/bin/kubectl
-
-                            ls -la /root/.kube/
-                           # mv ~/.kube/config ~/.kube/config.bk
-
-                               echo -e "$AWS_ACCESS_KEY_ID\n$AWS_SECRET_ACCESS_KEY\nus-east-1\njson" | aws configure --profile applied-devops
-
-                            aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION}  --name ${EKS_CLUSTER_NAME}
-
-                            kubectl config use-context arn:aws:eks:us-east-1:975050378366:cluster/applied-devops
-                        kubectl apply -f deployment.yaml --validate=false
+                        ssh -i /path/to/your/private-key.pem ec2-user@EC2_PUBLIC_IP
                     '''
                 }
             }
