@@ -10,6 +10,7 @@ pipeline {
         DOCKER_IMAGE_NAME_FOR_CLIENT = 'harshpandey3001/client:latest'
         DOCKER_IMAGE_NAME_FOR_SERVER = 'harshpandey3001/server'
         ECR_URL = '975050378366.dkr.ecr.us-east-1.amazonaws.com'
+        PROFILE_NAME = 'applied-devops'
 
     }
 
@@ -79,7 +80,11 @@ pipeline {
                             ls -la /root/.kube/
                            # mv ~/.kube/config ~/.kube/config.bk
 
-                               aws configure
+                               aws configure --profile $PROFILE_NAME \
+                              set aws_access_key_id $AWS_ACCESS_KEY_ID \
+                              set aws_secret_access_key $AWS_SECRET_ACCESS_KEY \
+                              set region $AWS_DEFAULT_REGION
+
                             aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION}  --name ${EKS_CLUSTER_NAME}
 
                             kubectl config use-context arn:aws:eks:us-east-1:975050378366:cluster/applied-devops
