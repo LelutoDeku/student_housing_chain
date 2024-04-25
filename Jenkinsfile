@@ -64,6 +64,21 @@ pipeline {
             }
         }
 
+        stage('Terraform Provision') {
+            environment {
+                TF_IN_AUTOMATION = 'true' // Set Terraform in automation mode
+            }
+            steps {
+                script {
+                    // Initialize Terraform
+                    sh 'terraform init'
+                    
+                    // Apply Terraform configuration to create resources
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+
         stage('Deploy to EKS') {
             steps {
                 script {
