@@ -77,7 +77,7 @@ pipeline {
                             mv kubectl /usr/local/bin/kubectl
 
                             mv ~/.kube/config ~/.kube/config.bk
-                            aws eks update-kubeconfig --region ${AWS_REGION}  --name ${EKS_CLUSTER_NAME}
+                            aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION}  --name ${EKS_CLUSTER_NAME}
 
                         kubectl apply -f deployment.yaml
                     '''
