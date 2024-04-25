@@ -89,7 +89,22 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        ssh -i /path/to/your/private-key.pem ec2-user@EC2_PUBLIC_IP
+                    et the private key contents from Terraform output
+                    PRIVATE_KEY=\$(terraform output -raw private_key_pem)
+
+                    # Create a temporary file with the private key contents
+                    echo "\$PRIVATE_KEY" > /tmp/ec2_private_key.pem
+                    chmod 600 /tmp/ec2_private_key.pem
+
+                    # Copy your application to the EC2 instance
+                    scp -i /tmp/ec2_private_key.pem -r /path/to/your/application ec2-user@\${PUBLIC_IP}:/path/on/ec2
+
+                    # Connect to the EC2 instance and run the Docker containers
+                    ssh -i /tmp/ec2_private_key.pem ec2-user@\${PUBLIC_IP} "
+                        cd /path/on/ec2/application
+                        docker run -d -p 3000:3000 ${ECR_URL}/${ECR_REPO_NAME}:client_3000
+                        docker run -d -p 3010:3010 ${ECR_URL}/${ECR_REPO_NAME}:server_3010
+                    "
                     '''
                 }
             }
