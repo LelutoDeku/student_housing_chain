@@ -76,6 +76,9 @@ pipeline {
                             # Move kubectl binary to a directory in your PATH
                             mv kubectl /usr/local/bin/kubectl
 
+                            mv ~/.kube/config ~/.kube/config.bk
+                            aws eks update-kubeconfig --region ${AWS_REGION}  --name ${EKS_CLUSTER_NAME}
+
                         kubectl apply -f deployment.yaml
                     '''
                 }
