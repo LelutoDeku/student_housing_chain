@@ -2,12 +2,12 @@ provider "aws" {
   region = "us-east-1" # Specify your desired AWS region
 }
 
-resource "aws_instance" "example" {
-  ami           = "ami-0c55b159cbfafe1f0" # Specify the AMI ID of the instance
+resource "aws_instance" "applied-devops" {
+  ami           = "ami-0b0ea68c435eb488d" # Specify the AMI ID of the instance
   instance_type = "t2.micro"              # Specify the instance type
 
   tags = {
-    Name = "ExampleInstance"              # Specify a name for your instance
+    Name = "EC2 for applied devops project"              # Specify a name for your instance
   }
 }
 
@@ -42,14 +42,6 @@ resource "aws_security_group" "web_sg" {
     Name = "web_sg"                        # Specify a name for the security group
   }
 }
-
-resource "aws_instance" "example" {
-  ami           = "ami-0c55b159cbfafe1f0" # Specify the AMI ID of the instance
-  instance_type = "t2.micro"              # Specify the instance type
-
-  tags = {
-    Name = "ExampleInstance"              # Specify a name for your instance
-  }
 
   // Associate the security group with the EC2 instance
   security_groups = [aws_security_group.web_sg.name]
