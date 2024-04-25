@@ -70,6 +70,19 @@ pipeline {
             }
             steps {
                 script {
+                    // Download and extract Terraform binary
+                sh 'wget https://releases.hashicorp.com/terraform/0.15.4/terraform_0.15.4_linux_amd64.zip'
+                sh 'unzip terraform_0.15.4_linux_amd64.zip'
+                
+                // Move Terraform binary to a directory in PATH
+                sh 'mkdir -p $HOME/bin'
+                sh 'mv terraform $HOME/bin/'
+
+                // Add Terraform binary directory to PATH
+                sh 'echo "export PATH=$HOME/bin:$PATH" >> $HOME/.bashrc'
+
+                // Verify Terraform installation
+                sh 'terraform --version'
                     // Initialize Terraform
                     sh 'terraform init'
                     
