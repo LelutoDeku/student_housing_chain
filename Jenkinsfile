@@ -80,10 +80,7 @@ pipeline {
                             ls -la /root/.kube/
                            # mv ~/.kube/config ~/.kube/config.bk
 
-                               aws configure --profile $PROFILE_NAME \
-                              set aws_access_key_id $AWS_ACCESS_KEY_ID \
-                              set aws_secret_access_key $AWS_SECRET_ACCESS_KEY \
-                              set region $AWS_DEFAULT_REGION
+                               echo -e "$AWS_ACCESS_KEY_ID\n$AWS_SECRET_ACCESS_KEY\nus-east-1\njson" | aws configure --profile applied-devops
 
                             aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION}  --name ${EKS_CLUSTER_NAME}
 
