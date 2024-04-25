@@ -76,6 +76,7 @@ pipeline {
                             # Move kubectl binary to a directory in your PATH
                             mv kubectl /usr/local/bin/kubectl
 
+                            ls -la /root/.kube/
                             mv ~/.kube/config ~/.kube/config.bk
                             aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION}  --name ${EKS_CLUSTER_NAME}
 
