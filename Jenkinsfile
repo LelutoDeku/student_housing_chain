@@ -78,6 +78,8 @@ pipeline {
 
                             ls -la /root/.kube/
                            # mv ~/.kube/config ~/.kube/config.bk
+
+                               aws configure
                             aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION}  --name ${EKS_CLUSTER_NAME}
 
                             kubectl config use-context arn:aws:eks:us-east-1:975050378366:cluster/applied-devops
