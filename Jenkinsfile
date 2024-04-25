@@ -75,11 +75,14 @@ pipeline {
                     
                     // Apply Terraform configuration to create resources
                     sh 'terraform apply -auto-approve'
-                     // Retrieve the public IP address from Terraform output and store it in a variable
-                        EC2_PUBLIC_IP = $(terraform output -raw public_ip)
+                    // Retrieve the public IP address from Terraform output and store it in a variable
+                    def EC2_PUBLIC_IP = sh(
+                        script: "terraform output -raw public_ip",
+                        returnStdout: true
+                    ).trim()
 
-                     // Output the value of the variable
-                    echo "The public IP address of the EC2 instance is: $public_ip"
+                    // Output the value of the variable
+                    echo "The public IP address of the EC2 instance is: $EC2_PUBLIC_IP"
 
                 }
             }
